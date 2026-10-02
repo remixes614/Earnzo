@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earnzo - Play, Earn, Enjoy | Rewards App</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Main Web App Container -->
+  <div class="web-app-container">
+    
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="logo-container">
+        <span class="logo-text">Earnzo</span>
+        <span class="logo-tagline">Play • Earn • Enjoy</span>
+      </div>
+      <button class="header-action-btn" id="btnNotification" onclick="openModal('notifications')">
+        <i class="fa-regular fa-bell"></i>
+        <span class="notif-badge" id="notifBadge"></span>
+      </button>
+    </header>
+
+    <!-- Main Screen Viewports -->
+    <div class="app-screen-viewport" id="screenViewport">
+      
+      <!-- ================= HOME SCREEN ================= -->
+      <div class="screen-page active" id="screen-home">
+        <!-- Total Balance Card -->
+        <div class="card-balance">
+          <div class="balance-top">
+            <span class="balance-label">Total Balance</span>
+            <i class="fa-solid fa-wallet" style="opacity: 0.7; font-size: 1.2rem;"></i>
+          </div>
+          <div class="balance-row">
+            <div class="coin-badge-icon">U</div>
+            <div>
+              <div class="balance-amount" id="homeBalanceUC">2,540 UC</div>
+            </div>
+          </div>
+          <div class="balance-footer-pill">
+            <i class="fa-solid fa-circle-check" style="color: #4ade80;"></i>
+            <span>Minimum Redeem: 10,000 UC</span>
+          </div>
+        </div>
+
+        <!-- Download Banner Card -->
+        <div class="banner-download">
+          <div class="banner-left">
+            <div class="banner-title">1 App Download = 1,000 UC</div>
+            <div class="banner-sub">Instant Reward Credit</div>
+          </div>
+          <div class="banner-gift-img">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+        </div>
+
+        <!-- Daily Bonus Card -->
+        <div class="daily-bonus-card">
+          <div class="bonus-info">
+            <h4>Daily Bonus</h4>
+            <p>Claim your daily reward (+100 UC)</p>
+          </div>
+          <button class="btn-claim" id="btnClaimDaily" onclick="claimDailyBonus()">Claim Now</button>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="section-header">
+          <span class="section-title">Top Actions</span>
+          <span class="view-all-link" onclick="switchTab('offers')">View All &gt;</span>
+        </div>
+        <div class="actions-grid">
+          <div class="action-item" onclick="switchTab('offers')">
+            <div class="action-icon"><i class="fa-solid fa-gift"></i></div>
+            <span class="action-name">Offers</span>
+            <span class="action-sub">Earn UC</span>
+          </div>
+          <div class="action-item" onclick="switchTab('refer')">
+            <div class="action-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <span class="action-name">Refer & Earn</span>
+            <span class="action-sub">Invite Friends</span>
+          </div>
+          <div class="action-item" onclick="switchTab('wallet')">
+            <div class="action-icon"><i class="fa-solid fa-wallet"></i></div>
+            <span class="action-name">Wallet</span>
+            <span class="action-sub">My Earnings</span>
+          </div>
+          <div class="action-item" onclick="navigateToWithdraw()">
+            <div class="action-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+            <span class="action-name">Withdraw</span>
+            <span class="action-sub">Get Rewards</span>
+          </div>
+        </div>
+
+        <!-- Top Offers List -->
+        <div class="section-header">
+          <span class="section-title">Top Offers</span>
+          <span class="view-all-link" onclick="switchTab('offers')">View All &gt;</span>
+        </div>
+        <div class="offers-list" id="homeOffersList">
+          <!-- Dynamic insert from JS -->
+        </div>
+      </div>
+
+      <!-- ================= OFFERS SCREEN ================= -->
+      <div class="screen-page" id="screen-offers">
+        <div class="section-header" style="margin-bottom: 8px;">
+          <span class="section-title" style="font-size: 1.1rem;">Offers</span>
+          <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+        </div>
+
+        <!-- Search Input -->
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="offerSearchInput" placeholder="Search offers by app name..." onkeyup="filterOffers()">
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="categories-bar">
+          <button class="chip-btn active" onclick="selectCategory('All', this)">All</button>
+          <button class="chip-btn" onclick="selectCategory('Trending', this)">Trending</button>
+          <button class="chip-btn" onclick="selectCategory('Games', this)">Games</button>
+          <button class="chip-btn" onclick="selectCategory('Finance', this)">Finance</button>
+          <button class="chip-btn" onclick="selectCategory('Other', this)">Other</button>
+        </div>
+
+        <!-- Full Offers List -->
+        <div class="offers-list" id="fullOffersList">
+          <!-- Dynamic insert from JS -->
+        </div>
+      </div>
+
+      <!-- ================= REFER & EARN SCREEN ================= -->
+      <div class="screen-page" id="screen-refer">
+        <div class="refer-banner">
+          <i class="fa-solid fa-users-viewfinder" style="font-size: 3rem; color: var(--primary); margin-bottom: 10px;"></i>
+          <div class="refer-title">Invite Your Friends</div>
+          <div class="refer-sub">and earn unlimited UC for every friend</div>
+
+          <div class="refer-code-box">
+            <div>
+              <div class="code-label">Your Referral Code</div>
+              <div class="code-value" id="referralCodeDisplay">EARNZO567</div>
+            </div>
+            <button class="btn-copy" onclick="copyReferralCode()" title="Copy Code">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+          </div>
+
+          <button class="btn-share" onclick="shareInviteLink()">
+            <i class="fa-solid fa-share-nodes"></i> Share Invite Link
+          </button>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="refer-stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statTotalRef">32</div>
+            <div class="stat-label">Total Referrals</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statSuccessRef">18</div>
+            <div class="stat-label">Successful</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statEarnedUC">2,400</div>
+            <div class="stat-label">UC Earned</div>
+          </div>
+        </div>
+
+        <!-- Recent Referrals -->
+        <div class="section-header">
+          <span class="section-title">Recent Referrals</span>
+          <span class="view-all-link">View All &gt;</span>
+        </div>
+        <div class="custom-list" id="recentReferralsList">
+          <!-- Dynamic insert from JS -->
+        </div>
+      </div>
+
+      <!-- ================= WALLET SCREEN ================= -->
+      <div class="screen-page" id="screen-wallet">
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-title" style="font-size: 1.1rem;">Wallet</span>
+        </div>
+
+        <!-- Available Balance Card -->
+        <div class="card-balance">
+          <div class="balance-top">
+            <span class="balance-label">Available Balance</span>
+            <i class="fa-solid fa-wallet" style="font-size: 1.2rem;"></i>
+          </div>
+          <div class="balance-row">
+            <div class="coin-badge-icon">U</div>
+            <div>
+              <div class="balance-amount" id="walletBalanceUC">2,540 UC</div>
+            </div>
+          </div>
+          <div class="balance-footer-pill">
+            <i class="fa-solid fa-circle-check" style="color: #4ade80;"></i>
+            <span>Minimum Redeem: 10,000 UC</span>
+          </div>
+        </div>
+
+        <!-- Tabs Toggle (Transactions vs Redeem History) -->
+        <div class="tab-toggle-bar">
+          <button class="tab-toggle-btn active" id="tabBtnTx" onclick="toggleWalletTab('tx')">Transactions</button>
+          <button class="tab-toggle-btn" id="tabBtnRedeem" onclick="toggleWalletTab('redeem')">Redeem History</button>
+        </div>
+
+        <!-- Transactions List Container -->
+        <div class="custom-list" id="walletTxList">
+          <!-- Dynamic insert from JS -->
+        </div>
+
+        <!-- Redeem History List Container -->
+        <div class="custom-list" id="walletRedeemList" style="display: none;">
+          <!-- Dynamic insert from JS -->
+        </div>
+      </div>
+
+      <!-- ================= WITHDRAW SCREEN ================= -->
+      <div class="screen-page" id="screen-withdraw">
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-title" style="font-size: 1.1rem;">Withdraw</span>
+        </div>
+
+        <!-- Balance Banner -->
+        <div class="card-balance" style="padding: 16px; margin-bottom: 14px;">
+          <div class="balance-top" style="margin-bottom: 4px;">
+            <span class="balance-label" style="font-size: 0.7rem;">Your Balance</span>
+          </div>
+          <div class="balance-row">
+            <div class="coin-badge-icon" style="width:36px; height:36px; font-size:1.1rem;">U</div>
+            <div>
+              <div class="balance-amount" id="withdrawBalanceUC" style="font-size: 1.4rem;">2,540 UC</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="withdraw-card">
+          <div class="withdraw-card-title">Withdraw Options</div>
+          <div class="payment-methods-grid">
+            <div class="method-chip selected" onclick="selectPaymentMethod('UPI', this)">
+              <i class="fa-solid fa-mobile-screen"></i>
+              <span>UPI</span>
+            </div>
+            <div class="method-chip" onclick="selectPaymentMethod('Paytm', this)">
+              <i class="fa-solid fa-wallet"></i>
+              <span>Paytm</span>
+            </div>
+            <div class="method-chip" onclick="selectPaymentMethod('Bank', this)">
+              <i class="fa-solid fa-building-columns"></i>
+              <span>Bank Transfer</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label id="paymentInputLabel">Enter UPI ID</label>
+            <input type="text" class="input-control" id="withdrawAccountInput" placeholder="Enter your UPI ID (e.g. name@upi)">
+          </div>
+
+          <div class="withdraw-card-title">Select Amount (UC)</div>
+          <div class="amount-chips-grid">
+            <div class="amount-chip selected" onclick="selectWithdrawAmount(10000, this)">
+              <div class="ezc">10,000 UC</div>
+            </div>
+            <div class="amount-chip" onclick="selectWithdrawAmount(25000, this)">
+              <div class="ezc">25,000 UC</div>
+            </div>
+            <div class="amount-chip" onclick="selectWithdrawAmount(50000, this)">
+              <div class="ezc">50,000 UC</div>
+            </div>
+            <div class="amount-chip" onclick="selectWithdrawAmount(100000, this)">
+              <div class="ezc">1,00,000 UC</div>
+            </div>
+            <div class="amount-chip" onclick="selectWithdrawAmount(250000, this)">
+              <div class="ezc">2,50,000 UC</div>
+            </div>
+            <div class="amount-chip" onclick="selectWithdrawAmount(500000, this)">
+              <div class="ezc">5,00,000 UC</div>
+            </div>
+          </div>
+
+          <button class="btn-submit-withdraw" onclick="processWithdrawal()">
+            <i class="fa-solid fa-paper-plane"></i> Withdraw Now
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= PROFILE SCREEN ================= -->
+      <div class="screen-page" id="screen-profile">
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-title" style="font-size: 1.1rem;">Profile</span>
+        </div>
+
+        <div class="profile-user-card">
+          <div class="profile-avatar-wrapper">
+            <img id="userAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200" alt="User">
+          </div>
+          <div class="profile-info">
+            <h3 id="userName">Rahul Kumar</h3>
+            <p id="userEmail">rahulkumar@email.com</p>
+            <div class="verified-badge">
+              <i class="fa-solid fa-shield-check"></i> Verified User
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-list">
+          <div class="menu-item" onclick="showToast('Personal Information verified')">
+            <div class="menu-left"><i class="fa-regular fa-user"></i> Personal Information</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="switchTab('refer')">
+            <div class="menu-left"><i class="fa-solid fa-users"></i> Referral History</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="switchTab('wallet')">
+            <div class="menu-left"><i class="fa-solid fa-receipt"></i> Transaction History</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="switchTab('wallet')">
+            <div class="menu-left"><i class="fa-solid fa-clock-rotate-left"></i> Redeem History</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="openModal('notifications')">
+            <div class="menu-left"><i class="fa-regular fa-bell"></i> Notifications</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="openModal('help')">
+            <div class="menu-left"><i class="fa-regular fa-circle-question"></i> Help & Support</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="openModal('terms')">
+            <div class="menu-left"><i class="fa-regular fa-file-lines"></i> Terms & Conditions</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item" onclick="openModal('privacy')">
+            <div class="menu-left"><i class="fa-solid fa-lock"></i> Privacy Policy</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+          <div class="menu-item logout" onclick="handleLogout()">
+            <div class="menu-left"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
+            <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Sticky Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-tab active" id="nav-home" onclick="switchTab('home')">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-tab" id="nav-offers" onclick="switchTab('offers')">
+        <i class="fa-solid fa-gift"></i>
+        <span>Offers</span>
+      </button>
+      <button class="nav-tab" id="nav-refer" onclick="switchTab('refer')">
+        <i class="fa-solid fa-user-group"></i>
+        <span>Refer</span>
+      </button>
+      <button class="nav-tab" id="nav-wallet" onclick="switchTab('wallet')">
+        <i class="fa-solid fa-wallet"></i>
+        <span>Wallet</span>
+      </button>
+      <button class="nav-tab" id="nav-profile" onclick="switchTab('profile')">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <!-- ================= MODALS OVERLAY CONTAINER ================= -->
+    <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+      
+      <!-- App Details Modal -->
+      <div class="modal-card" id="modalAppDetails" style="display: none;">
+        <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+          <div class="offer-icon-wrapper" style="width: 56px; height: 56px; border-radius: 16px;">
+            <img id="detailAppIcon" src="" alt="App Icon">
+          </div>
+          <div>
+            <h3 id="detailAppName" style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">Coin Master</h3>
+            <div style="display: flex; gap: 8px; align-items: center; margin-top: 2px;">
+              <span style="background: #dcfce7; color: #15803d; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;" id="detailRating">4.5 ★</span>
+              <span style="background: #e0f2fe; color: #0369a1; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;" id="detailPopular">Popular</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reward Banner -->
+        <div style="background: var(--primary-light); padding: 12px 16px; border-radius: var(--radius-md); text-align: center; margin-bottom: 16px;">
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-dark);" id="detailRewardText">1,000 UC Reward</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Complete the offer to earn</div>
+        </div>
+
+        <h4 style="font-size: 0.88rem; font-weight: 800; margin-bottom: 8px;">Steps to Earn</h4>
+        <div class="steps-list" id="detailStepsList">
+          <!-- Dynamic insert -->
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; background: #f8fafc; padding: 10px; border-radius: var(--radius-md); text-align: center;">
+          <div>
+            <div style="font-size: 0.65rem; color: var(--text-muted);">Category</div>
+            <div style="font-size: 0.78rem; font-weight: 800;" id="detailCategory">Games</div>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; color: var(--text-muted);">Time to Complete</div>
+            <div style="font-size: 0.78rem; font-weight: 800;" id="detailTime">1-7 Days</div>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; color: var(--text-muted);">Reward</div>
+            <div style="font-size: 0.78rem; font-weight: 800;" id="detailRewardSmall">1,000 UC</div>
+          </div>
+        </div>
+
+        <button class="btn-share" id="btnDownloadNow" onclick="completeCurrentOffer()">
+          <i class="fa-solid fa-download"></i> Download Now
+        </button>
+      </div>
+
+      <!-- Notifications Modal -->
+      <div class="modal-card" id="modalNotifications" style="display: none;">
+        <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="section-header" style="margin-bottom: 14px;">
+          <span class="section-title" style="font-size: 1.1rem;">Notifications</span>
+          <span class="view-all-link" onclick="markAllNotificationsRead()">Mark all as read</span>
+        </div>
+        <div class="custom-list" id="notificationsList">
+          <!-- Dynamic insert from JS -->
+        </div>
+      </div>
+
+      <!-- Help & Support Modal -->
+      <div class="modal-card" id="modalHelp" style="display: none;">
+        <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div style="background: var(--primary-gradient); color: #fff; padding: 16px; border-radius: var(--radius-lg); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 800;">How can we help you?</h3>
+            <p style="font-size: 0.75rem; opacity: 0.9;">We are here to assist you 24/7</p>
+          </div>
+          <i class="fa-regular fa-comments" style="font-size: 2rem;"></i>
+        </div>
+
+        <h4 style="font-size: 0.88rem; font-weight: 800; margin-bottom: 10px;">Popular Topics</h4>
+        <div class="custom-list" id="faqAccordionList">
+          <!-- Dynamic FAQs insert -->
+        </div>
+
+        <div style="margin-top: 16px; text-align: center; background: #f8fafc; padding: 12px; border-radius: var(--radius-md);">
+          <div style="font-size: 0.78rem; font-weight: 700; margin-bottom: 6px;">Still need help?</div>
+          <button class="btn-claim" onclick="showToast('Connecting to live support agent...')">Contact Us</button>
+        </div>
+      </div>
+
+      <!-- Terms & Privacy Modals -->
+      <div class="modal-card" id="modalTerms" style="display: none;">
+        <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Terms & Conditions</h3>
+        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+          <p>1. <strong>Eligibility:</strong> Users must be 18 years or older to claim rewards on Earnzo.</p>
+          <p>2. <strong>Earned Balance:</strong> UC coins are reward credits redeemable via UPI, Paytm, or direct Bank transfer.</p>
+          <p>3. <strong>Minimum Withdrawal:</strong> The minimum redeem amount is 10,000 UC.</p>
+          <p>4. <strong>Fair Use:</strong> Multiple account creations or emulator automation will result in permanent account suspension.</p>
+        </div>
+      </div>
+
+      <div class="modal-card" id="modalPrivacy" style="display: none;">
+        <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Privacy Policy</h3>
+        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+          <p>Your privacy is important to us. Earnzo encrypts all payment information and never shares personal identification data with 3rd parties.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
